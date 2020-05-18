@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        {% block head %}
+        <title>Launchstore</title>
+        {% endblock head %}
+
+        <meta charset=utf-8>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <body>
+        {% include "parts/header.njk" %}
+
+        {# DINAMIC CONTENT #}
+        {% block content %}
+        {% endblock content %}
+
+        {% include "parts/footer.njk" %}
+    </body>
+</html>

@@ -22,7 +22,7 @@ module.exports = {
             if(req.body[key] == '')
                 res.send('Por favor, preencha todos os campos!')
         
-        let result = await Product.create(req.body)
+        const result = await Product.create(req.body)
         const productID = result.rows[0].id
 
         return res.redirect(`/products/${productID}/edit`)

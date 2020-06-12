@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "debug": "nodemon --inspect=0.0.0.0:9229 src/server.js",
     "start": "node src/server.js",
     "dev": "npm-run-all -p nodemon browsersync",
     "nodemon": "nodemon src/server.js",

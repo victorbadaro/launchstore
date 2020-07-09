@@ -40,7 +40,7 @@ const Mask = {
     cep(value) {
         value = value.replace(/\D/g, '')
 
-        if(value.length > 14)
+        if(value.length > 8)
             value = value.slice(0, -1)
 
         value = value.replace(/(\d{5})(\d)/, '$1-$2')
@@ -185,5 +185,30 @@ const Lightbox = {
         Lightbox.target.style.top = '-100%'
         // Lightbox.target.style.bottom = initial
         Lightbox.closebutton.style.top = '-80px'
+    }
+}
+
+const Validate = {
+    apply(input, func) {
+        const result = Validate[func](input.value)
+
+        input.value = result.value
+
+        if(result.error)
+            alert(result.error)
+
+        input.focus()
+    },
+    isEmail(value) {
+        let error = null
+        const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+        if(!value.match(mailFormat))
+            error = 'Email inválido'
+
+        return {
+            error,
+            value
+        }
     }
 }

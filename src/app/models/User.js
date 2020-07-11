@@ -1,4 +1,6 @@
 const db = require('../../config/db')
+const { create } = require('browser-sync')
+const { hash } = require('bcryptjs')
 
 module.exports = {
     async findOne(filters) {
@@ -15,5 +17,36 @@ module.exports = {
 
         const result = await db.query(query)
         return result.rows[0]
+    },
+    async create(data) {
+        try {
+            const query = `
+                INSERT INTO users (
+                    name,
+                    email,
+                    password,
+                    cpf_cnpj,
+                    cep,
+                    address
+                ) VALUES ($1, $2, $3, $4, $5, $6)
+                RETURNING id`
+            
+            // HASH OF PASSWORD
+            const passwordHash = await hash(data.password, 8)
+            
+            const values = [
+                data.name,
+                data.email,
+                passwordHash,
+                data.cpf_cnpj.replace(/\D/g, ''),
+                data.cep.replace(/\D/g, ''),
+                data.address
+            ]
+    
+            const result = await db.query(query, values)
+            return result.rows[0].id
+        } catch (error) {
+            console.error(error)
+        }
     }
 }

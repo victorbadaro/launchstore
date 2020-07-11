@@ -6,7 +6,7 @@ async function post(req, res, next) {
 
     for(let key of keys) {
         if(req.body[key] == '')
-            return res.send('Please, fill all fields!')
+            return res.render('user/register', { error: 'Por favor, preencha todos os campos', user: req.body })
     }
 
     // CHECK IF USER EXISTS [EMAIL, CPF_CNPJ]
@@ -19,11 +19,11 @@ async function post(req, res, next) {
     })
 
     if(user)
-        return res.send('Users exists')
+        return res.render('user/register', { error: 'Usuário já cadastrado.', user: req.body })
 
     // CHECK IF PASSWORD MATCH
     if(password != passwordRepeat)
-        return res.send('Password Mismatch')
+        return res.render('user/register', { error: 'A senha e a repetição da senha estão incorretas', user: req.body })
     
     next()
 }

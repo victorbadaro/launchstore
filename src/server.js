@@ -7,6 +7,10 @@ const app = express()
 
 app.set('view engine', 'njk')
 app.use(session)
+app.use((req, res, next) => {
+    res.locals.session = req.session
+    return next()
+})
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))

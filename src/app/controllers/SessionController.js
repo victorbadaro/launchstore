@@ -19,7 +19,9 @@ module.exports = {
     forgotForm(req, res) {
         return res.render('session/forgot-password')
     },
-    resetForm(req, res) {},
+    resetForm(req, res) {
+        return res.render('session/password-reset', { token: req.query.token })
+    },
     async forgot(req, res) {
         const user = req.user
 
@@ -53,5 +55,7 @@ module.exports = {
             return res.render('session/forgot-password', { error: 'Erro inesperado, tente novamente' })
         }
     },
-    reset(req, res) {}
+    reset(req, res) {
+        
+    }
 }

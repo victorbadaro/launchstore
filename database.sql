@@ -51,6 +51,10 @@ ALTER TABLE "products" ADD FOREIGN KEY ("category_id") REFERENCES "categories" (
 ALTER TABLE "products" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 ALTER TABLE "files" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
 ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE "users" ADD COLUMN reset_token TEXT;
+ALTER TABLE "users" ADD COLUMN reset_token_expires TEXT;
+ALTER TABLE "products" DROP CONSTRAINT "products_user_id_fkey", ADD CONSTRAINT "products_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;
+ALTER TABLE "files" DROP CONSTRAINT "files_product_id_fkey", ADD CONSTRAINT "files_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "products" ("id") ON DELETE CASCADE;
 
 CREATE FUNCTION trigger_set_timestamp()
 RETURNS TRIGGER AS $$

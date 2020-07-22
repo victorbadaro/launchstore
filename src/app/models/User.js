@@ -2,23 +2,12 @@ const db = require('../../config/db')
 const { hash } = require('bcryptjs')
 const fs = require('fs')
 const Product = require('./Product')
+const Base = require('./Base')
+
+Base.init({ table: 'users' })
 
 module.exports = {
-    async findOne(filters) {
-        let query = 'SELECT * FROM users'
-
-        Object.keys(filters).map(key => {
-            query = `${query}
-            ${key}`
-
-            Object.keys(filters[key]).map(field => {
-                query = `${query} ${field} = '${filters[key][field]}'`
-            })
-        })
-
-        const result = await db.query(query)
-        return result.rows[0]
-    },
+    ...Base,
     async create(data) {
         try {
             const query = `

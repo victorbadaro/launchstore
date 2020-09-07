@@ -62,7 +62,7 @@ BEGIN
   NEW.updated_at = NOW();
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql
+$$ LANGUAGE plpgsql;
 
 -- AUTO updated_at products
 CREATE TRIGGER trigger_set_timestamp

@@ -79,3 +79,13 @@ EXECUTE PROCEDURE trigger_set_timestamp();
 INSERT INTO categories (name) VALUES ('comida');
 INSERT INTO categories (name) VALUES ('eletrônicos');
 INSERT INTO categories (name) VALUES ('automóveis');
+
+-- TO RUN SEEDS
+DELETE FROM products;
+DELETE FROM users;
+DELETE FROM files;
+
+-- RESTART SEQUENCE auto_increment FROM TABLES ids
+ALTER SEQUENCE products_id_seq RESTART WITH 1;
+ALTER SEQUENCE users_id_seq RESTART WITH 1;
+ALTER SEQUENCE files_id_seq RESTART WITH 1;

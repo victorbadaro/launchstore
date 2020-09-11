@@ -55,7 +55,7 @@ async function update(req, res, next) {
     const fillAllFields = checkAllFields(req.body)
 
     if(fillAllFields)
-        return res.render('user/index', { fillAllFields })
+        return res.render('user/index', fillAllFields)
     
     const { id, password } = req.body
 

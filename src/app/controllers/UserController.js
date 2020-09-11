@@ -84,8 +84,8 @@ module.exports = {
             req.session.destroy()
 
             // REMOVER AS IMAGENS DA PASTA 'PUBLIC'
-            promiseResult.map(result => {
-                result.rows.map(file => {
+            promiseResult.map(files => {
+                files.map(file => {
                     try {
                         unlinkSync(file.path)
                     } catch (error) {

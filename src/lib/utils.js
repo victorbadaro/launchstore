@@ -1,3 +1,5 @@
+const { NumberFormat } = require('intl')
+
 module.exports = {
     date(timestamp) {
         const date = new Date(timestamp)
@@ -20,7 +22,8 @@ module.exports = {
         }
     },
     formatPrice(price) {
-        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price/100)
+        const formattedPrice = NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price/100)
+        return formattedPrice
     },
     formatCpfCnpj(value) {
         value = value.replace(/\D/g, '')

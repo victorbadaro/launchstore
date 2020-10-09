@@ -4,12 +4,14 @@ const routes = Router()
 
 const products = require('./products')
 const users = require('./users')
+const cart = require('./cart')
 
 // HOME
 routes.get('/', HomeController.index)
 
 routes.use('/products', products)
 routes.use('/users', users)
+routes.use('/cart', cart)
 
 // ALIAS
 routes.get('/ads/create', function(req, res) {

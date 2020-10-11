@@ -1,3 +1,4 @@
+const { sep } = require('path')
 const Product = require('../models/Product')
 
 const { formatPrice, date } = require('../../lib/utils')
@@ -15,7 +16,7 @@ async function getImages(productId) {
 async function format(product) {
     const files = await getImages(product.id)
 
-    product.img = `${files[0].src}`.replace('\\', '\/').replace('\\', '\/')
+    product.img = `${files[0].src}`.split(sep).join('/')
     product.files = files
     product.formattedOldPrice = formatPrice(product.old_price)
     product.formattedPrice = formatPrice(product.price)

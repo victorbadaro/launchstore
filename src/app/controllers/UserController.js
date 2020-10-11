@@ -102,11 +102,7 @@ module.exports = {
         }
     },
     async ads(req, res) {
-        const products = await LoadProductService.load('products', {
-            where: {
-                user_id: req.session.userId
-            }
-        })
+        const products = await LoadProductService.load('products', { where: { user_id: req.session.userId } })
 
         return res.render('user/ads', { products })
     }

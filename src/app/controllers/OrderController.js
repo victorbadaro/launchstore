@@ -1,7 +1,10 @@
 const LoadProductService = require('../services/LoadProductService')
 const User = require('../models/User')
+const Order = require('../models/Order')
 
+const Cart = require('../../lib/cart')
 const mailer = require('../../lib/mailer')
+const { formatPrice, date } = require('../../lib/utils')
 
 const email = (seller, product, buyer) => `
     <h2>Olá, ${seller.name}!</h2>
@@ -21,36 +24,105 @@ const email = (seller, product, buyer) => `
 `
 
 module.exports = {
+    async index(req, res) {
+        // pegar os pedidos do usuário
+        let orders = await Order.findAll({ where: { buyer_id: req.session.userId } })
+
+        const getOrdersPromises = orders.map(async order => {
+            // detalhes do produto
+            order.product = await LoadProductService.load('products', { where: { id: order.product_id } })
+
+            // detalhes do comprador
+            order.buyer = await User.findOne({ where: { id: order.buyer_id } })
+
+            // detalhes do vendedor
+            order.seller = await User.findOne({ where: { id: order.seller_id } })
+
+            // formatação de preço
+            order.formattedPrice = formatPrice(order.price)
+            order.formattedTotal = formatPrice(order.total)
+
+            // formatação do status
+            const status = {
+                open: 'Aberto',
+                sold: 'Vendido',
+                canceled: 'Cancelado'
+            }
+
+            order.formattedStatus = status[order.status]
+
+            // formatação de atualizado em ..
+            const updatedAt = date(order.updated_at)
+            order.formattedUpdatedAt = `${order.formattedStatus} em ${updatedAt.day}/${updatedAt.month}/${updatedAt.year} às ${updatedAt.hour}h${updatedAt.minutes}min.`
+
+            return order
+        })
+
+        orders = await Promise.all(getOrdersPromises)
+
+        return res.render('orders/index', { orders })
+    },
     async post(req, res) {
         try {
-            // pegar os dados do produto
-            const product = await LoadProductService.load('product', {
-                where: {
-                    id: req.body.id
-                }
-            })
-            
-            // os dados do vendedor
-            const seller = await User.findOne({
-                where: {
-                    id: product.user_id
-                }
+            // pegar os produtos do carrinho
+            const cart = Cart.init(req.session.cart)
+
+            const buyer_id = req.session.userId
+            const filteredItems = cart.items.filter(item => item.product.user_id != buyer_id)
+
+            // criar pedido
+            const createOrdersPromises = filteredItems.map(async item => {
+                let { product, price: total, quantity } = item
+                const { price, id: product_id, user_id: seller_id } = product
+                const status = 'open'
+
+                const order = await Order.create({
+                    seller_id,
+                    buyer_id,
+                    product_id,
+                    price,
+                    total,
+                    quantity,
+                    status
+                })
+                
+                // pegar os dados do produto
+                product = await LoadProductService.load('product', {
+                    where: {
+                        id: product_id
+                    }
+                })
+                
+                // os dados do vendedor
+                const seller = await User.findOne({
+                    where: {
+                        id: seller_id
+                    }
+                })
+    
+                // os dados do comprador
+                const buyer = await User.findOne({
+                    where: {
+                        id: buyer_id
+                    }
+                })
+    
+                // enviar email com dados da compra para o vendedor
+                await mailer.sendMail({
+                    from: 'no-reply@launchstore.com.br',
+                    to: seller.email,
+                    subject: 'Novo pedido de compra',
+                    html: email(seller, product, buyer)
+                })
+
+                return order
             })
 
-            // os dados do comprador
-            const buyer = await User.findOne({
-                where: {
-                    id: req.session.userId
-                }
-            })
+            await Promise.all(createOrdersPromises)
 
-            // enviar email com dados da compra para o vendedor
-            await mailer.sendMail({
-                from: 'no-reply@launchstore.com.br',
-                to: seller.email,
-                subject: 'Novo pedido de compra',
-                html: email(seller, product, buyer)
-            })
+            // clear cart
+            delete req.session.cart
+            Cart.init()
 
             // notificar o usuário com alguma mensagem de sucesso
             return res.render('orders/success')

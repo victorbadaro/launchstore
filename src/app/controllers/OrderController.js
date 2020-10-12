@@ -30,7 +30,7 @@ module.exports = {
 
         const getOrdersPromises = orders.map(async order => {
             // detalhes do produto
-            order.product = await LoadProductService.load('products', { where: { id: order.product_id } })
+            order.product = await LoadProductService.load('product', { where: { id: order.product_id } })
 
             // detalhes do comprador
             order.buyer = await User.findOne({ where: { id: order.buyer_id } })

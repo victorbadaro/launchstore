@@ -22,3 +22,9 @@
 .order-error a {
     color: #dc6868;
 }
+
+/* my orders */
+.orders .item-container {
+    display: grid;
+    grid-template-columns: 1fr ;
+}

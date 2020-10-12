@@ -37,6 +37,10 @@ const Base = {
         const result = await find(filters, this.table)
         return result.rows
     },
+    async findOneWithDeleted(filters) {
+        const result = await find(filters, `${this.table}_with_deleted`)
+        return result.rows[0]
+    },
     async create(fields) {
         let keys = []
         let values = []

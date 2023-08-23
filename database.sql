@@ -99,7 +99,7 @@ CREATE TABLE "orders" (
     "price" INT NOT NULL,
     "quantity" INT DEFAULT 0,
     "total" INT NOT NULL,
-    "status" TEXT NOT NULL DEFAULT "open",
+    "status" TEXT NOT NULL DEFAULT 'open',
     "created_at" TIMESTAMP WITHOUT TIME ZONE DEFAULT (now()),
     "updated_at" TIMESTAMP WITHOUT TIME ZONE DEFAULT (now())
 );

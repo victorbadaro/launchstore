@@ -13,13 +13,13 @@ async function createUsers() {
     const users = []
     const password = await hash('1234', 8)
 
-    while(users.length < totalUsers) {
+    while (users.length < totalUsers) {
         users.push({
             name: faker.name.firstName(),
             email: faker.internet.email(),
             password,
-            cpf_cnpj: faker.random.number(99999999999),
-            cep: faker.random.number(99999999),
+            cpf_cnpj: faker.datatype.number(99999999999),
+            cep: faker.datatype.number(99999999),
             address: faker.address.streetName()
         })
     }
@@ -32,15 +32,15 @@ async function createUsers() {
 async function createProducts() {
     let products = []
 
-    while(products.length < totalProducts) {
+    while (products.length < totalProducts) {
         products.push({
             category_id: Math.ceil(Math.random() * 3),
             user_id: usersIDs[Math.floor(Math.random() * totalUsers)],
             name: faker.name.title(),
             description: faker.lorem.paragraph(Math.ceil(Math.random() * 10)),
-            old_price: faker.random.number(9999),
-            price: faker.random.number(9999),
-            quantity: faker.random.number(99),
+            old_price: faker.datatype.number(9999),
+            price: faker.datatype.number(9999),
+            quantity: faker.datatype.number(99),
             status: Math.round(Math.random())
         })
     }
@@ -50,7 +50,7 @@ async function createProducts() {
 
     let files = []
 
-    while(files.length < 50) {
+    while (files.length < 50) {
         files.push({
             name: faker.image.image(),
             path: `public/images/placeholder.png`,

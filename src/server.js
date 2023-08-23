@@ -1,9 +1,12 @@
+require('dotenv').config();
+
 const express = require('express')
 const nunjucks = require('nunjucks')
 const methodOverride = require('method-override')
 const session = require('./config/session')
 const routes = require('./routes')
 const app = express()
+const SERVER_PORT = process.env.SERVER_PORT
 
 app.set('view engine', 'njk')
 app.use(session)
@@ -22,6 +25,6 @@ nunjucks.configure('src/app/views', {
     noCache: true
 })
 
-app.listen(5000, function() {
+app.listen(SERVER_PORT, function () {
     console.log('Server is running...')
 })

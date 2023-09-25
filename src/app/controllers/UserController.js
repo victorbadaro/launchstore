@@ -27,7 +27,7 @@ module.exports = {
                 cep,
                 address
             })
-    
+
             req.session.userId = userId
             return res.redirect('/users')
         } catch (error) {
@@ -37,10 +37,10 @@ module.exports = {
     async show(req, res) {
         try {
             const { user } = req
-    
+
             user.cpf_cnpj = formatCpfCnpj(user.cpf_cnpj)
             user.cep = formatCep(user.cep)
-    
+
             return res.render('user/index', { user })
         } catch (error) {
             console.error(error)
@@ -80,7 +80,7 @@ module.exports = {
 
             // DELETAR O USUÁRIO
             await User.delete(req.body.id)
-            
+
             // DESTRUIR A SESSÃO
             req.session.destroy()
 
@@ -88,7 +88,9 @@ module.exports = {
             promiseResult.map(files => {
                 files.map(file => {
                     try {
-                        unlinkSync(file.path)
+                        if (file.path !== 'public/images/placeholder.png') {
+                            unlinkSync(file.path)
+                        }
                     } catch (error) {
                         console.error(error)
                     }

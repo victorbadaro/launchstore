@@ -1,6 +1,13 @@
+-- STEP 1
 DROP DATABASE IF EXISTS launchstoredb;
+
+-- STEP 2
 CREATE DATABASE launchstoredb;
 
+-- STEP 3
+/* Switch to launchstoredb database */
+
+-- STEP 4
 CREATE TABLE "products" (
   "id" SERIAL PRIMARY KEY,
   "category_id" int NOT NULL,
